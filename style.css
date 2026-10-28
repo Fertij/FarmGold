@@ -1,0 +1,156 @@
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+body,html{margin:0;padding:0;width:100%;height:100dvh;overflow:hidden;background:#a8e6cf;touch-action:none;font-family:'Varela Round', system-ui, sans-serif;color:#fff}
+#game-container{position:absolute;top:0;left:0;width:100%;height:100dvh;z-index:1;overflow:hidden}
+
+/* ... (ОСТАЛЬНОЙ CSS БЕЗ ИЗМЕНЕНИЙ, КАК В ПРЕДЫДУЩЕМ СООБЩЕНИИ) ... */
+
+#mainMenu{position:absolute;inset:0;background:rgba(46, 125, 50, 0.4);backdrop-filter:blur(8px);z-index:500;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease}
+.title-container{position:relative;margin-bottom:40px;animation:floatTitle 4s ease-in-out infinite}
+@keyframes floatTitle{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-15px) rotate(2deg)}}
+.game-title{font-family: 'Varela Round', sans-serif;font-size: 80px; font-weight: 900; text-transform: uppercase;margin: 0; text-align: center; line-height: 0.9; letter-spacing: 2px;background: linear-gradient(180deg, #ffea00 0%, #ffaa00 50%, #ff5500 100%);-webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;filter: drop-shadow(0 4px 0 #cc4400) drop-shadow(0 8px 10px rgba(0,0,0,0.4));}
+.menu-btn{width: 280px; padding: 18px; margin: 12px; border-radius: 25px;font-weight: 900; border: 4px solid #fff; cursor: pointer;transition: all 0.1s; display: flex; justify-content: center; align-items: center;}
+.btn-text {font-family: 'Varela Round', sans-serif;font-size: 26px;text-transform: uppercase;background: linear-gradient(180deg, #fff 0%, #ffe066 100%);-webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;filter: drop-shadow(0 3px 0 rgba(0,0,0,0.4));display: flex; align-items: center; gap: 10px;}
+.btn-start{background: linear-gradient(180deg, #a7c957, #6a994e); box-shadow: 0 10px 0 #386641, 0 15px 25px rgba(0,0,0,0.4)}
+.btn-start:active{transform: translateY(10px); box-shadow: 0 0 0 #386641, 0 5px 10px rgba(0,0,0,0.4)}
+.btn-settings{background: linear-gradient(180deg, #ddb892, #b08968); box-shadow: 0 10px 0 #7f5539, 0 15px 25px rgba(0,0,0,0.4)}
+.btn-settings:active{transform: translateY(10px); box-shadow: 0 0 0 #7f5539, 0 5px 10px rgba(0,0,0,0.4)}
+
+#cutsceneOverlay{position:absolute;inset:0;z-index:800;pointer-events:none;display:none;overflow:hidden}
+#fadeOverlay{position:absolute;inset:0;background:#000;opacity:0;transition:opacity 1s;z-index:803;pointer-events:none}
+.cinematic-bar{position:absolute;left:0;right:0;height:12vh;background:#000;transition:transform 1s cubic-bezier(0.77, 0, 0.175, 1);z-index:801}
+.top-bar{top:0;transform:translateY(-100%)}
+.bottom-bar{bottom:0;transform:translateY(100%)}
+#cutsceneOverlay.active .top-bar{transform:translateY(0)}
+#cutsceneOverlay.active .bottom-bar{transform:translateY(0)}
+.cutscene-text{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8);font-family:'Varela Round', sans-serif; font-size:38px; font-weight:900;text-align:center; width:90%; pointer-events:none; z-index:802; line-height:1.3;color: #ffffff;text-shadow: -3px -3px 0 #5c4033, 3px -3px 0 #5c4033, -3px 3px 0 #5c4033, 3px 3px 0 #5c4033, 0 8px 0 #3e2723, 0 15px 20px rgba(0,0,0,0.8);opacity:0; transition:opacity 0.8s, transform 0.8s;}
+.cutscene-text.show{opacity:1; transform:translate(-50%,-50%) scale(1)}
+#skipCutsceneBtn{position:absolute;bottom:15vh;right:20px;background:rgba(255,255,255,0.2);border:2px solid #fff;color:#fff;padding:10px 25px;border-radius:20px;font-weight:bold;font-family:'Varela Round', sans-serif;pointer-events:auto;cursor:pointer;display:none;z-index:802;backdrop-filter:blur(4px);transition:all 0.2s}
+#skipCutsceneBtn:active{background:rgba(255,255,255,0.4);transform:scale(0.95)}
+#cutsceneOverlay.active #skipCutsceneBtn{display:block}
+
+.modal{position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:600;display:none;justify-content:center;align-items:center;padding:20px}
+.panel{background:linear-gradient(145deg, #fdf4dc, #f4e4c1);border:6px solid #b08968;border-radius:30px;width:100%;max-width:420px;padding:30px 20px;box-shadow:0 20px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.5);position:relative;text-align:center;animation:popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 85vh; overflow-y: auto;}
+@keyframes popIn{0%{transform:scale(0.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.panel h2{margin:0 0 20px;color:#7f5539;font-size:30px;text-shadow:0 2px 0 #fff;padding:0 35px;font-family:'Varela Round', sans-serif}
+.close-btn{position:absolute;top:15px;right:15px;background:#e07a5f;border:3px solid #fff;border-radius:50%;width:40px;height:40px;display:flex;justify-content:center;align-items:center;font-size:22px;color:#fff;font-weight:900;box-shadow:0 3px 0 #b05b43;cursor:pointer;z-index:10}
+.close-btn:active{transform:translateY(3px);box-shadow:0 0 0 #b05b43}
+
+.slot-container{background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:15px;margin-bottom:15px;box-shadow:0 4px 0 #e6d5b8;position:relative;text-align:left}
+.slot-title{font-size:18px;font-weight:900;color:#7f5539;margin-bottom:5px}
+.slot-info{font-size:14px;color:#a68a64;margin-bottom:12px;font-weight:bold}
+.slot-actions{display:flex;gap:10px;justify-content:space-between}
+.slot-btn{flex:1;padding:10px;border-radius:12px;font-weight:900;font-size:14px;border:2px solid #fff;cursor:pointer;text-align:center;transition:all 0.1s;font-family:'Varela Round', sans-serif}
+.slot-btn.new{background:linear-gradient(180deg, #a7c957, #6a994e);box-shadow:0 4px 0 #386641;color:#fff}
+.slot-btn.continue{background:linear-gradient(180deg, #90e0ef, #00b4d8);box-shadow:0 4px 0 #0077b6;color:#fff}
+.slot-btn.delete{background:linear-gradient(180deg, #ff8a65, #e74c3c);box-shadow:0 4px 0 #c0392b;color:#fff;flex:0 0 50px}
+.slot-btn:active{transform:translateY(4px);box-shadow:none}
+
+.setting-row{display:flex;justify-content:space-between;align-items:center;background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:15px 20px;margin-bottom:15px;box-shadow:0 4px 0 #e6d5b8}
+.setting-label{font-size:22px;font-weight:900;color:#5c4033;font-family:'Varela Round', sans-serif;display:flex;align-items:center;gap:8px}
+.toggle-switch{position:relative;width:70px;height:38px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:38px;box-shadow:inset 0 2px 5px rgba(0,0,0,0.2)}
+.slider:before{position:absolute;content:"";height:30px;width:30px;left:4px;bottom:4px;background-color:white;transition:.4s;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.3)}
+input:checked + .slider{background-color:#6a994e}
+input:checked + .slider:before{transform:translateX(32px)}
+.settings-back-btn{width:100%; margin-top:20px; background:linear-gradient(180deg, #ddb892, #b08968); box-shadow:0 5px 0 #7f5539}
+
+#customModalOverlay {position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:1000;display:none;justify-content:center;align-items:center;padding:20px}
+.custom-modal-box {background:linear-gradient(145deg, #fdf4dc, #f4e4c1);border:6px solid #b08968;border-radius:25px;padding:25px;width:100%;max-width:340px;text-align:center;box-shadow:0 15px 30px rgba(0,0,0,0.5);animation:popIn 0.3s}
+.custom-modal-title {color:#e07a5f;font-size:26px;font-weight:900;margin-bottom:15px;text-shadow:0 2px 0 #fff;font-family:'Varela Round', sans-serif}
+.custom-modal-text {color:#5c4033;font-size:18px;margin-bottom:25px;font-weight:bold;font-family:'Varela Round', sans-serif;line-height:1.3}
+.custom-modal-btns {display:flex;gap:12px;justify-content:center}
+.custom-btn {flex:1;padding:14px;border-radius:15px;font-weight:900;font-size:18px;border:3px solid #fff;cursor:pointer;transition:all 0.1s;font-family:'Varela Round', sans-serif;color:#fff}
+.btn-ok {background:linear-gradient(180deg, #a7c957, #6a994e);box-shadow:0 5px 0 #386641}
+.btn-cancel {background:linear-gradient(180deg, #ff8a65, #e74c3c);box-shadow:0 5px 0 #c0392b}
+.custom-btn:active {transform:translateY(4px);box-shadow:none}
+
+#hud{position:absolute;top:0;left:0;right:0;padding:15px;padding-top:max(70px, calc(env(safe-area-inset-top) + 60px));pointer-events:none;z-index:10;display:flex;flex-direction:column;gap:10px;align-items:flex-start;opacity:0;transition:opacity 0.5s}
+.stats-box{display:flex;gap:8px;flex-direction:row;flex-wrap:wrap}
+.stat-item{background:rgba(255,255,255,0.95);border:3px solid #ffb703;border-radius:25px;padding:6px 16px;font-size:18px;font-weight:900;color:#e07a5f;display:flex;align-items:center;gap:8px;box-shadow:0 4px 0 #d4a373, inset 0 -3px 0 rgba(0,0,0,0.1);transition:transform 0.1s}
+.stat-item svg{width:24px;height:24px;filter:drop-shadow(0 2px 2px rgba(0,0,0,0.2))}
+.egg-stat{border-color:#e0e0e0;color:#c19a6b}
+.egg-icon{font-size:22px}
+.day-indicator{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.95);border:3px solid #ffb703;border-radius:20px;padding:4px 12px;font-size:14px;font-weight:900;color:#5c4033;box-shadow:0 4px 0 #d4a373;font-family:'Varela Round', sans-serif;width:fit-content}
+#dayIcon{font-size:18px}
+
+.top-btn{position:absolute;top:max(15px, env(safe-area-inset-top));z-index:20;background:linear-gradient(180deg, #ddb892, #b08968);border:3px solid #9c6644;border-radius:14px;padding:4px;box-shadow:0 4px 0 #7f5539, 0 6px 10px rgba(0,0,0,0.2);display:none;align-items:center;justify-content:center;transition:all 0.1s;opacity:0;width:38px;height:38px}
+.top-btn:active{transform:translateY(4px);box-shadow:0 0 0 #7f5539}
+.top-btn svg{width:20px;height:20px;fill:#fff;filter:drop-shadow(0 2px 0 rgba(0,0,0,0.2))}
+#invBtn{right:12px}
+#shopBtn{right:56px}
+#marketBtn{right:100px}
+#menuBtn{right:144px}
+#orientationBtn{right:188px;background:linear-gradient(180deg, #90e0ef, #00b4d8);border-color:#0077b6;box-shadow:0 4px 0 #023e8a, 0 6px 10px rgba(0,0,0,0.2)}
+
+.bottom-circle-btn{position:absolute;bottom:max(35px, env(safe-area-inset-bottom));left:25px;z-index:15;width:85px;height:85px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fdf4dc, #f4e4c1);border:5px solid #b08968;box-shadow:0 8px 0 #7f5539, 0 12px 20px rgba(0,0,0,0.3);display:none;justify-content:center;align-items:center;font-size:45px;transition:all 0.1s;opacity:0;color:#5c4033}
+.bottom-circle-btn:active{transform:translateY(5px);box-shadow:0 3px 0 #7f5539}
+#toolBtn{left:auto;right:145px;background:radial-gradient(circle at 30% 30%, #e0f7fa, #b3e5fc);border-color:#0288d1;box-shadow:0 8px 0 #01579b, 0 12px 20px rgba(0,0,0,0.3)}
+#toolBtn:active{box-shadow:0 3px 0 #01579b}
+#toolBtn.active{transform:scale(1.08);border-color:#ffd700;box-shadow:0 8px 0 #b8860b, 0 12px 20px rgba(255,215,0,0.4)}
+.tool-count{position:absolute;bottom:2px;right:4px;background:#fff;border:2px solid #0288d1;border-radius:10px;padding:0 6px;font-size:12px;font-weight:900;color:#0288d1;line-height:14px;min-width:22px;text-align:center}
+
+#joystick{position:absolute;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.3);border:3px solid rgba(255,255,255,.6);z-index:10;pointer-events:none;display:none;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+#jstick{position:absolute;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.9);top:35px;left:35px;box-shadow:0 4px 8px rgba(0,0,0,0.2)}
+
+#actionBtn{position:absolute;bottom:max(35px, env(safe-area-inset-bottom));right:25px;width:115px;height:115px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #90e0ef, #00b4d8);border:5px solid #fff;color:#fff;font-weight:900;font-size:15px;z-index:15;box-shadow:0 8px 0 #0077b6, 0 12px 20px rgba(0,0,0,0.3);display:none;justify-content:center;align-items:center;text-align:center;line-height:1.1;text-shadow:0 2px 2px rgba(0,0,0,.3);opacity:0;transition:all 0.1s;padding:0 5px;white-space:nowrap}
+#actionBtn.active{opacity:1;transform:scale(1.05);background:radial-gradient(circle at 30% 30%, #a7c957, #6a994e);box-shadow:0 8px 0 #386641, 0 15px 25px rgba(106,153,78,0.6)}
+#actionBtn:active{transform:translateY(5px);box-shadow:0 3px 0 #386641}
+
+.shop-item{background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:15px;box-shadow:0 4px 0 #e6d5b8;display:flex;flex-direction:column;gap:12px;margin-bottom:15px}
+.shop-item.locked{opacity:0.7;filter:grayscale(0.3)}
+.item-top{display:flex;align-items:center;gap:15px}
+.item-icon{width:55px;height:55px;background:#ffd166;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:28px;border:3px solid #ffb703;box-shadow:0 3px 0 #e09f3e;flex-shrink:0}
+.item-name{font-weight:900;color:#5c4033;font-size:20px;text-align:left;line-height:1.2;font-family:'Varela Round', sans-serif}
+.item-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:2px dashed #e6d5b8}
+.item-price{font-weight:900;color:#e07a5f;font-size:22px;display:flex;align-items:center;gap:6px}
+.buy-btn{background:linear-gradient(180deg, #a7c957, #6a994e);border:3px solid #fff;border-radius:15px;padding:10px 22px;color:#fff;font-weight:900;font-size:16px;box-shadow:0 5px 0 #386641;cursor:pointer;transition:all 0.1s;min-width:110px}
+.buy-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #386641}
+.buy-btn:disabled{background:#ccc;box-shadow:0 5px 0 #999;cursor:not-allowed;transform:none;color:#eee}
+
+.inv-item{background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;box-shadow:0 4px 0 #e6d5b8}
+.inv-count{font-size:24px;font-weight:900;color:#5c4033;background:#f4e4c1;padding:5px 15px;border-radius:12px;border:2px solid #ddb892;font-family:'Varela Round', sans-serif}
+
+.seed-choice{background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:20px;margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 0 #e6d5b8}
+.seed-choice.selected{border-color:#6a994e;background:#f0fdf4;transform:scale(1.02);box-shadow:0 6px 0 #386641}
+.seed-choice.locked{opacity:0.55;cursor:not-allowed;background:#eee}
+
+.market-tabs{display:flex;gap:10px;margin-bottom:20px}
+.market-tab{flex:1;padding:12px;border-radius:15px;border:3px solid #e6d5b8;background:#fff;font-weight:900;font-size:16px;color:#7f5539;cursor:pointer;transition:all 0.15s;font-family:'Varela Round', sans-serif}
+.market-tab.active{background:linear-gradient(180deg, #a7c957, #6a994e);color:#fff;border-color:#fff;box-shadow:0 4px 0 #386641}
+.market-tab-content{text-align:left}
+.market-empty{text-align:center;color:#a68a64;font-weight:bold;padding:30px 10px;font-size:16px}
+
+.market-sell-item{background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;box-shadow:0 4px 0 #e6d5b8}
+.market-sell-item .item-top{flex:1;min-width:0}
+.sell-actions{display:flex;gap:6px;flex-shrink:0}
+.sell-actions .buy-btn{min-width:auto;padding:8px 12px;font-size:13px;border-width:2px}
+.sell-actions .sell-all{background:linear-gradient(180deg, #ffb703, #fb8500);box-shadow:0 5px 0 #b35900}
+.sell-actions .sell-all:active{box-shadow:0 1px 0 #b35900}
+.sell-actions .buy-btn:disabled{background:#ccc;box-shadow:0 5px 0 #999}
+
+.market-buy-item{background:#fff;border:4px solid #e6d5b8;border-radius:20px;padding:15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;box-shadow:0 4px 0 #e6d5b8}
+.market-buy-item .item-name{font-size:17px}
+.market-buy-item .item-desc{font-size:13px;color:#a68a64;font-weight:bold;margin-top:4px}
+.market-buy-item .buy-btn{min-width:auto;padding:10px 14px;font-size:14px}
+
+#achievementToast{position:absolute;top:max(160px, calc(env(safe-area-inset-top) + 150px));left:50%;transform:translateX(-50%) translateY(-300%);background:linear-gradient(145deg, #fdf4dc, #f4e4c1);border:5px solid #ffd700;border-radius:22px;padding:14px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 0 #b8860b, 0 12px 25px rgba(0,0,0,0.35);z-index:900;transition:all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);max-width:90%;pointer-events:none;opacity:0;visibility:hidden}
+#achievementToast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
+.toast-icon{font-size:32px;flex-shrink:0}
+.toast-text{text-align:left}
+.toast-title{font-weight:900;color:#b8860b;font-size:16px;font-family:'Varela Round', sans-serif}
+.toast-desc{font-weight:bold;color:#5c4033;font-size:14px;font-family:'Varela Round', sans-serif}
+
+#desktopHint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:bold;z-index:5;backdrop-filter:blur(4px);display:none;pointer-events:none;font-family:'Varela Round', sans-serif;white-space:nowrap;max-width:95vw;overflow:hidden;text-overflow:ellipsis}
+body.desktop #desktopHint{display:block}
+body.desktop #seedBtn{bottom:auto;top:50%;left:15px;transform:translateY(-50%);width:70px;height:70px;font-size:36px}
+body.desktop #toolBtn{bottom:auto;top:calc(50% + 90px);left:15px;transform:none;width:70px;height:70px;font-size:36px;right:auto}
+body.desktop #actionBtn{bottom:auto;top:50%;right:15px;transform:translateY(-50%)}
+
+@media (orientation: landscape) {
+  #hud { padding-top: max(15px, env(safe-area-inset-top)); }
+  .top-btn { top: max(15px, env(safe-area-inset-top)); }
+  .bottom-circle-btn { bottom: max(20px, env(safe-area-inset-bottom)); left: 20px; width: 75px; height: 75px; font-size: 38px; }
+  #toolBtn { left: 110px; right: auto; bottom: max(20px, env(safe-area-inset-bottom)); }
+  #actionBtn { bottom: max(20px, env(safe-area-inset-bottom)); right: 20px; width: 95px; height: 95px; font-size: 14px; }
+}

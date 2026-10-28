@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#a8e6cf">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<title>Little Farm</title>
+</head>
+<body>
+<div id="game-container"></div>
+
+<!-- Универсальный alert/confirm -->
+<div id="customModalOverlay">
+  <div class="custom-modal-box">
+    <div class="custom-modal-title" id="customModalTitle">Заголовок</div>
+    <div class="custom-modal-text" id="customModalText">Текст сообщения</div>
+    <div class="custom-modal-btns" id="customModalBtns"></div>
+  </div>
+</div>
+
+<!-- Катсцена -->
+<div id="cutsceneOverlay">
+  <div id="fadeOverlay"></div>
+  <div class="cinematic-bar top-bar"></div>
+  <div class="cutscene-text" id="cutsceneText1">В далеком уголке земли...</div>
+  <div class="cutscene-text" id="cutsceneText2">...где сбываются мечты...</div>
+  <div class="cutscene-text" id="cutsceneText3">Твоя история начинается здесь.</div>
+  <div class="cinematic-bar bottom-bar"></div>
+  <button id="skipCutsceneBtn">ПРОПУСТИТЬ ➔</button>
+</div>
+
+<!-- Главное меню -->
+<div id="mainMenu">
+  <div class="title-container"><h1 class="game-title">Little<br>Farm</h1></div>
+  <button class="menu-btn btn-start" id="openSaveMenuBtn"><span class="btn-text">▶ ИГРАТЬ</span></button>
+  <button class="menu-btn btn-settings" id="openSettingsBtn"><span class="btn-text">⚙ НАСТРОЙКИ</span></button>
+</div>
+
+<!-- Слоты -->
+<div id="saveModal" class="modal">
+  <div class="panel">
+    <button class="close-btn" id="closeSaveBtn">✕</button>
+    <h2>Выбор сохранения</h2>
+    <div id="slotList"></div>
+  </div>
+</div>
+
+<!-- Настройки -->
+<div id="settingsModal" class="modal">
+  <div class="panel">
+    <button class="close-btn" id="closeSettingsBtn">✕</button>
+    <h2>⚙ Настройки</h2>
+    <div class="setting-row">
+      <span class="setting-label">🔊 Звуки</span>
+      <label class="toggle-switch"><input type="checkbox" id="soundToggle" checked><span class="slider"></span></label>
+    </div>
+    <button class="buy-btn settings-back-btn" id="closeSettingsBtn2">ВЕРНУТЬСЯ</button>
+  </div>
+</div>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="stats-box">
+    <div class="stat-item" id="coinBox">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd700" stroke="#d4a373" stroke-width="2"/><circle cx="12" cy="12" r="7" fill="#ffea00"/><path d="M10 8h4v8h-4z" fill="#f1c40f"/><path d="M9 9h6v2H9z" fill="#f1c40f"/><path d="M9 13h6v2H9z" fill="#f1c40f"/></svg>
+      <span id="coins">0</span>
+    </div>
+    <div class="stat-item egg-stat" id="eggBox">
+      <span class="egg-icon">🥚</span>
+      <span id="eggsHud">0</span>
+    </div>
+  </div>
+  <div class="day-indicator" id="dayIndicator">
+    <span id="dayIcon">🌅</span>
+    <span id="dayNumber">День 1</span>
+  </div>
+</div>
+
+<!-- Кнопки сверху -->
+<button id="menuBtn" class="top-btn" title="Меню">
+  <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
+<button id="marketBtn" class="top-btn" title="Рынок">
+  <svg viewBox="0 0 24 24"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21z"/></svg>
+</button>
+<button id="shopBtn" class="top-btn" title="Магазин">
+  <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+</button>
+<button id="invBtn" class="top-btn" title="Инвентарь">
+  <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+</button>
+<button id="orientationBtn" class="top-btn" title="Повернуть экран">
+  <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31-5.26c-.39.39-1.02.39-1.41 0l-2.12-2.12c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l2.12 2.12c.39.39.39 1.02 0 1.41zM5.26 12.51c-.39.39-1.02.39-1.41 0-.39-.39-.39-1.02 0-1.41l2.12-2.12c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-2.12 2.12z"/></svg>
+</button>
+
+<!-- Нижние контролы -->
+<button id="seedBtn" class="bottom-circle-btn">🌽</button>
+<button id="toolBtn" class="bottom-circle-btn" style="display:none">💧<span class="tool-count" id="waterCount">15</span></button>
+<button id="actionBtn">ДЕЙСТВИЕ</button>
+
+<!-- Модалки -->
+<div id="shopModal" class="modal">
+  <div class="panel">
+    <button class="close-btn" id="closeShopBtn">✕</button>
+    <h2>🛒 Семена</h2>
+    <div id="shopItems"></div>
+  </div>
+</div>
+
+<div id="marketModal" class="modal">
+  <div class="panel">
+    <button class="close-btn" id="closeMarketBtn">✕</button>
+    <h2>🏪 Рынок</h2>
+    <div class="market-tabs">
+      <button class="market-tab active" data-tab="sell">Продать</button>
+      <button class="market-tab" data-tab="buy">Улучшения</button>
+    </div>
+    <div id="marketSellTab" class="market-tab-content"></div>
+    <div id="marketBuyTab" class="market-tab-content" style="display:none"></div>
+  </div>
+</div>
+
+<div id="invModal" class="modal">
+  <div class="panel">
+    <button class="close-btn" id="closeInvBtn">✕</button>
+    <h2>🎒 Инвентарь</h2>
+    <div id="invItems"></div>
+  </div>
+</div>
+
+<div id="seedModal" class="modal">
+  <div class="panel">
+    <button class="close-btn" id="closeSeedBtn">✕</button>
+    <h2>🌱 Выбор семян</h2>
+    <div id="seedChoices"></div>
+  </div>
+</div>
+
+<div id="joystick"><div id="jstick"></div></div>
+
+<div id="achievementToast">
+  <div class="toast-icon">🏆</div>
+  <div class="toast-text">
+    <div class="toast-title" id="toastTitle">Достижение</div>
+    <div class="toast-desc" id="toastDesc"></div>
+  </div>
+</div>
+
+<div id="desktopHint">
+  <b>WASD</b> — движение · <b>Мышь</b> — камера · <b>E</b> — действие · <b>Колесо</b> — зум · <b>1-4</b> — семя · <b>T</b> — инструмент
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
+</script>
+<script type="module" src="game.js"></script>
+</body>
+</html>
