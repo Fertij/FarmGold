@@ -41,7 +41,6 @@ function setupThree() {
   return renderer.domElement;
 }
 
-// ЖЕСТКИЙ РЕСАЙЗ (использует window.innerWidth, который точен в WebView)
 function resizeGame() {
   const w = window.innerWidth;
   const h = window.innerHeight;
@@ -50,7 +49,6 @@ function resizeGame() {
     state.camera.aspect = w / h;
     state.camera.updateProjectionMatrix();
     state.renderer.setSize(w, h, false);
-    // Принудительно обновляем стили холста на случай багов WebView
     state.renderer.domElement.style.width = w + 'px';
     state.renderer.domElement.style.height = h + 'px';
   }
@@ -60,6 +58,14 @@ export function startCutscene() {
   state.gameState = 'cutscene';
   state.cutscene.timer = 0;
   state.cutscene.step = 0;
+
+  // --- ИСПРАВЛЕНИЕ: Скрываем главное меню перед началом катсцены ---
+  const mainMenu = document.getElementById('mainMenu');
+  if (mainMenu) {
+    mainMenu.style.display = 'none';
+    mainMenu.style.opacity = '0';
+  }
+  // -------------------------------------------------------------
 
   const ov = document.getElementById('cutsceneOverlay');
   ov.style.display = 'block';
@@ -365,7 +371,6 @@ function bootstrap() {
     setTimeout(resizeGame, 800);
   });
   
-  // Слушаем визуальный вьюпорт (помогает в мобильных браузерах при появлении/скрытии адресной строки)
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', resizeGame);
   }
